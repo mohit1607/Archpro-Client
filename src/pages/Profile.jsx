@@ -104,8 +104,16 @@ const Profile = () => {
               {
                 posts.map((curr,index) => {
                   return (
-                    <Card key={index+curr.author} imageUrls={curr.imageUrls} title={curr.title} desc={curr.content} postId={curr.postId}/>
-                  )
+                    <Card
+                      key={index + curr.author}
+                      imageUrls={curr.imageUrls}
+                      title={curr.title}
+                      desc={curr.content}
+                      postId={curr.postId}
+                      state={curr.selectedState}
+                      author={curr.author}
+                    />
+                  );
                 })
               }
             </div>

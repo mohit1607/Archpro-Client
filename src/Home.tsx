@@ -7,7 +7,6 @@ import About2 from './components/About2.jsx'
 
 const Home = () => {
 
-    
 
 
   return (

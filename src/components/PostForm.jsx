@@ -4,6 +4,39 @@ import {FirebaseContext} from '../context/firebase/firebaseContext'
 import { addDoc, collection } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+
+const statesOfIndia = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+];
+
+
 const PostForm = ({
     cancel=() => {},
     updatePosts=() => {}
@@ -13,6 +46,7 @@ const PostForm = ({
 
     const [selectedImages, setSelectedImages] = useState([]);
     const[ imagesDisplay, setImagesDisplay] = useState([])
+    const [selectedState, setSelectedState] = useState("");
 
     const uploadImages = async () => {
         let imageUrls = []
@@ -52,7 +86,8 @@ const PostForm = ({
                     title,
                     content,
                     author: user,
-                    imageUrls
+                    imageUrls,
+                    selectedState
                 });
                 console.log("Document written with ID: ", docRef.id);
                 toast.success('Post uploaded successfully')
@@ -106,37 +141,81 @@ const PostForm = ({
     };
 
     return (
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-            <label className="input input-bordered flex items-center gap-2">
-                Post Title
-                <input type="text" className="grow" placeholder="Enter your post title" name="title" />
-            </label>
+      <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        <label className="input input-bordered flex items-center gap-2">
+          Post Title
+          <input
+            type="text"
+            className="grow"
+            placeholder="Enter your post title"
+            name="title"
+          />
+        </label>
 
-            <label className="input input-bordered flex items-center gap-2 h-[15rem]">
-                Post Content
-                <textarea className="grow h-[12rem] p-4 rounded-xl" placeholder="Write your post content here..." name="content" />
-            </label>
+        <label className="input input-bordered flex items-center gap-2 h-[15rem]">
+          Post Content
+          <textarea
+            className="grow h-[12rem] p-4 rounded-xl"
+            placeholder="Write your post content here..."
+            name="content"
+          />
+        </label>
 
-            <label className="input input-bordered flex items-center gap-2">
-                Upload Images
-                <input
-                    type="file"
-                    name="images"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageChange}
-                />
-            </label>
+        <label className="input input-bordered flex items-center gap-2">
+          Select State
+          <select
+            name="state"
+            className="grow bg-transparent border-l-2 border-black focus:outline-none"
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+          >
+            <option value="" disabled>
+              Select a state
+            </option>
+            {statesOfIndia.map((state, index) => (
+              <option key={index} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+        </label>
 
-            <div className="image-preview grid grid-cols-3 gap-4">
-                {imagesDisplay.map((src, index) => (
-                    <img key={index} src={src} alt={`Preview ${index + 1}`} className="h-24 w-24 object-cover" />
-                ))}
-            </div>
+        <label className="input input-bordered flex items-center gap-2">
+          Upload Images
+          <input
+            type="file"
+            name="images"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+          />
+        </label>
 
-            <button type="submit" className="btn bg-green-600 text-white hover:bg-green-500">Submit</button>
-            <button type="submit" onClick={() => cancel(false)} className="btn bg-red-400 text-white ml-4 hover:bg-red-300">cancel</button>
-        </form>
+        <div className="image-preview grid grid-cols-3 gap-4">
+          {imagesDisplay.map((src, index) => (
+            <img
+              key={index}
+              src={src}
+              alt={`Preview ${index + 1}`}
+              className="h-24 w-24 object-cover"
+            />
+          ))}
+        </div>
+
+        <button
+          type="submit"
+          className="btn bg-green-600 text-white hover:bg-green-500"
+        >
+          Submit
+        </button>
+        <button
+          type="submit"
+          onClick={() => cancel(false)}
+          className="btn bg-red-400 text-white ml-4 hover:bg-red-300"
+        >
+          cancel
+        </button>
+      </form>
     );
 }
 

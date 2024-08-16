@@ -18,50 +18,55 @@ const ProjectPage = () => {
   }, []);
 
   return (
-    <div className="pt-[5rem] px-[10%]">
+    <div className="pt-[5rem] px-[10%] flex flex-col items-center">
       <div className="w-full h-[80vh] flex justify-center flex-wrap">
         <div className="flex-1 flex flex-col justify-center items-center gap-4">
           <h1 className="bg-transparent line-clamp-3 text-5xl font-semibold text-center">
-            {state.title}
+            {state?.title}
           </h1>
-          <p className="text-2xl text-blue-400 text-center">
-            By- {state.author}
+          <p className="text-lg text-blue-900 text-center">
+            By- {state?.author}
+          </p>
+          <p className="text-xl text-gray-700 text-center">
+            {state?.place_state}
           </p>
         </div>
         <div className="w-[50rem] h-full overflow-hidden rounded-md border">
           <Zoom>
-          <img
-            className="w-full h-full object-cover"
-            src={state ? state?.imageUrls[0] : ""}
-            alt="random_image"
+            <img
+              className="w-full h-full object-cover"
+              src={state ? state?.imageUrls[0] : ""}
+              alt="random_image"
             />
           </Zoom>
         </div>
       </div>
-      <div className="flex gap-3 mt-8 justify-center items-center text-center h-[40vh] w-full text-3xl">
-        <div className="w-1/4 h-full">
-        <Zoom>
-          <img src={state.imageUrls[1]} alt="" />
-        </Zoom>
+      {state?.imageUrls.length > 1 && (
+        <div className="flex gap-3 mt-8 justify-center items-center text-center h-[40vh] w-full text-3xl">
+          <div className="w-1/4 h-full">
+            <Zoom>
+              <img src={state?.imageUrls[1]} alt="" />
+            </Zoom>
+          </div>
+          <div className="w-1/4 h-full">
+            <Zoom>
+              <img src={state?.imageUrls[2]} alt="" />
+            </Zoom>
+          </div>
+          <div className="w-1/4 h-full">
+            <Zoom>
+              <img src={state?.imageUrls[3]} alt="" />
+            </Zoom>
+          </div>
+          <div className="w-1/4 h-full">
+            <Zoom>
+              <img src={state?.imageUrls[4]} alt="" />
+            </Zoom>
+          </div>
         </div>
-        <div className="w-1/4 h-full">
-        <Zoom>
-          <img src={state.imageUrls[2]} alt="" />
-        </Zoom>
-        </div>
-        <div className="w-1/4 h-full">
-        <Zoom>
-          <img src={state.imageUrls[3]} alt="" />
-        </Zoom>
-        </div>
-        <div className="w-1/4 h-full">
-        <Zoom>
-          <img src={state.imageUrls[4]} alt="" />
-        </Zoom>
-        </div>
-      </div>
-      <div className="flex justify-center items-center text-center h-[60vh] w-full px-[10%] text-3xl">
-        {state.desc}
+      )}
+      <div className="text-center w-[60%] px-[10%] text-3xl mt-4 mb-16">
+        {state?.desc}
       </div>
     </div>
   );

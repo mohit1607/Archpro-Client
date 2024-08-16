@@ -10,9 +10,10 @@ const Card = ({
   author = "Person",
   postId,
   imageUrls=undefined,
+  state
 }) => {
   const navigate = useNavigate();
-
+  
   return (
     <div
       onClick={() =>
@@ -27,16 +28,18 @@ const Card = ({
               : [
                   "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp",
                 ],
+              place_state: state
           },
         })
       }
       role="card"
       className="card card-compact rounded w-[22rem] mb-8 bg-white transition-transform ease-in-out hover:-translate-y-3 cursor-pointer"
     >
-      <figure>
+      <figure className="w-full h-full">
         <img
+        className="h-full w-full object-scale-down"
           src={
-            "https://st.hzcdn.com/simgs/440190d20454a5eb_4-8523/tropical-hall.jpg"
+           imageUrls ? imageUrls[0] : "https://st.hzcdn.com/simgs/440190d20454a5eb_4-8523/tropical-hall.jpg"
           }
           alt="Shoes"
         />
