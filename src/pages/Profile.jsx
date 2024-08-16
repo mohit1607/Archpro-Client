@@ -104,7 +104,7 @@ const Profile = () => {
               {
                 posts.map((curr,index) => {
                   return (
-                    <Card key={index+curr.author} title={curr.title} desc={curr.content}/>
+                    <Card key={index+curr.author} imageUrls={curr.imageUrls} title={curr.title} desc={curr.content} postId={curr.postId}/>
                   )
                 })
               }

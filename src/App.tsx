@@ -14,6 +14,7 @@ import { Toaster } from 'react-hot-toast'
 import Modal from './components/Modal.jsx'
 import Profile from './pages/Profile.jsx'
 import Post from './pages/Post'
+import ProjectPage from './pages/ProjectPage'
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path='/project' element={<Layout><Project></Project></Layout>} />
         <Route path='/profile' element={<Layout><Profile></Profile></Layout>} />
         <Route path='/post' element={<Layout><Post></Post></Layout>} />
+        <Route path='/project_page' element={<Layout><ProjectPage></ProjectPage></Layout>} />
       </Routes>
       <Toaster position='top-center' reverseOrder={false} />
       <Modal heading={"Looks like You are not logged in yet"} text={modalText} />
