@@ -8,6 +8,7 @@ import { FirebaseContext } from "../context/firebase/firebaseContext";
 import Card from '../components/Card'
 import ImageUploadModal from "../components/ImageUploadModal";
 import { listAll, ref, getDownloadURL } from "firebase/storage";
+import blank from '../assets/blank.png'
 
 const Profile = () => {
 
@@ -16,8 +17,9 @@ const Profile = () => {
 
   const [createPost, setCreatePost] = useState(false)
   const [posts, setPosts] = useState([])
+  const [displayName, setDisplayName] = useState({})
   const [flag, setFlag] = useState(true) // used by image uploader to update
-  const [profilePicLive, setProfilePicLive] = useState('https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp')
+  const [profilePicLive, setProfilePicLive] = useState(blank)
 
   const getPosts = async() => {
     // console.log(typeof(user))
@@ -35,10 +37,27 @@ const Profile = () => {
         data.unshift({postId: doc.id, ...doc.data()})
       });
       setPosts(data)
+      userName()
       toast.success('post retrived successfully')
     }catch(e) {
       console.error('Unable to read data: ', e)
       toast.error('unable to read data due to some unknown error.')
+    }
+  }
+
+  const userName = async() => {
+    try{
+      const userRef = collection(store, "users");
+      let q = query(userRef, where('email','==',auth.currentUser.email))
+      const querySnapshot = await getDocs(q)
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        // console.log(doc.id, " => ", doc.data());
+        // data.unshift({postId: doc.id, ...doc.data()})
+        setDisplayName(doc.data())
+      })
+    }catch(e) {
+      console.log(e)
     }
   }
 
@@ -47,25 +66,28 @@ const Profile = () => {
     getPosts()
   }, [user])
 
-  useEffect(() => {
-    if(auth?.currentUser?.uid){
-      listAll(ref(storage, `profileImages/${auth.currentUser.uid}`)).then((images) => {
-      getDownloadURL(images.items[0]).then(url => {
-        console.log(url)
-        setProfilePicLive(url)
-      })
-    }).catch(e => {
-      console.error('Not loaded', e)
-    })
-    }
-  }, [auth, flag])
+useEffect(() => {
+  if (auth?.currentUser?.uid) {
+    const thisRef = ref(
+      storage,
+      `profileImages/${auth.currentUser.uid}/profile_pic`
+    );
+
+    getDownloadURL(thisRef)
+      .then((url) => setProfilePicLive(url))
+      .catch((e) => {
+        console.error("Not loaded", e);
+      });
+  }
+}, [auth, flag]);
+
 
 
 
 
   return (
     <main className='w-full pt-20 flex justify-center gap-3 px-[10%]'>
-      <ImageUploadModal storage={storage} auth={auth} setFlag={setFlag}/>
+      <ImageUploadModal store={store} storage={storage} auth={auth} setFlag={setFlag}/>
       <div className='w-[20rem] min-h-[30rem] max-h-[35rem] bg-blue-100 rounded-lg p-8 relative overflow-hidden shadow-md'>
         {/* image */}
         <div className='w-full h-[60%] overflow-hidden rounded relative'>
@@ -76,14 +98,14 @@ const Profile = () => {
         </div>
         {/* details */}
         <h1 className='w-full text-ellipsis whitespace-normal mt-4 text-4xl font-semibold line-clamp-2 leading-tight'>
-          This is Name
+          {displayName.Name ? displayName?.Name : 'No Name'}
         </h1>
         {/* username */}
         <h2 className='w-full text-ellipsis whitespace-normal mt-4 text-xl font-semibold line-clamp-1 leading-tight'>
-          This is user name
+          @{displayName.userName}
         </h2>
         {/* email */}
-        <p className='w-full mt-2 text-gray-600 text-lg line-clamp-1 leading-tight whitespace-normal text-ellipsis'>email@email.com</p>
+        <p className='w-full mt-2 text-gray-600 text-lg line-clamp-1 leading-tight whitespace-normal text-ellipsis'>{auth?.currentUser?.email}</p>
         {/* ribbon tag */}
         <div className='w-[15rem] py-2 bg-green-600 bottom-[3rem] absolute -right-[3rem] text-center text-white flex justify-center -rotate-45'>
          <div className='bg-green-500 border-white border w-full'>

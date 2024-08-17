@@ -1,11 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { AiOutlineCamera } from "react-icons/ai";
-import { ref as storageRef, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
+import { updateDoc, doc } from 'firebase/firestore';
 
-const ImageUploadModal = ({ storage, auth, setFlag }) => {
+const ImageUploadModal = ({ storage, auth, setFlag, store }) => {
+
 
     const [profilePic, setProfilePic] = useState('')
+
+
+    const updateUserImageUrl = async (userId, imageUrl) => {
+      try {
+        // Reference to the user document with the given UID
+        const userDocRef = doc(store, "users", userId);
+
+        // Update the imageurl field in the document
+        await updateDoc(userDocRef, {
+          imageUrl: imageUrl,
+        });
+
+        console.log("User image updated successfully with ID:", userId);
+        toast.success("User image updated successfully");
+      } catch (e) {
+        console.error("Error updating document:", e);
+        toast.error("Error updating user image");
+      }
+    };
 
     const uploadProfilePic = async () => {
         if (!profilePic) {
@@ -16,6 +37,9 @@ const ImageUploadModal = ({ storage, auth, setFlag }) => {
             const imageRef = storageRef(storage, `profileImages/${auth.currentUser.uid}/profile_pic`)
             uploadBytes(imageRef, profilePic)
             setFlag(prev => !prev)
+            let url = await getDownloadURL(imageRef);
+            console.log(url)
+            await updateUserImageUrl(auth.currentUser.uid, url)
             toast.success('Image uploaded successfully')
         } catch (e) {
             console.error("profile pic upload error: ", e);

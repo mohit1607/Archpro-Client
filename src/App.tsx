@@ -15,6 +15,7 @@ import Modal from './components/Modal.jsx'
 import Profile from './pages/Profile.jsx'
 import Post from './pages/Post'
 import ProjectPage from './pages/ProjectPage'
+import ProfileReadOnly from './pages/ProfileReadOnly'
 
 
 
@@ -29,10 +30,11 @@ function App() {
         <Route path='/auth' Component={Auth} />
         <Route path='/portal' element={<Layout><Portal></Portal></Layout>} />
         <Route path='/Portfolio' element={<Layout><Portfolio></Portfolio></Layout>} />
-        <Route path='/social' element={<Layout><Social></Social></Layout>} />
+        {/* <Route path='/social' element={<Layout><Social></Social></Layout>} /> */}
         <Route path='/project' element={<Layout><Project></Project></Layout>} />
         <Route path='/profile' element={<Layout><Profile></Profile></Layout>} />
         <Route path='/post' element={<Layout><Post></Post></Layout>} />
+        <Route path='/profile_read' element={<Layout><ProfileReadOnly></ProfileReadOnly></Layout>} />
         <Route path='/project_page' element={<Layout><ProjectPage></ProjectPage></Layout>} />
       </Routes>
       <Toaster position='top-center' reverseOrder={false} />

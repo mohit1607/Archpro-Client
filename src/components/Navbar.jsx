@@ -67,7 +67,7 @@ const Navbar = () => {
                     </details>
                 </li> */}
                     <li><a href='/portal' >Explore</a></li>
-                    <li><a href='/social' >Connect</a></li>
+                    {/* <li><a href='/social' >Connect</a></li> */}
                     {!user && <li><a className="border px-2 py-1 border-black hover:bg-green-600 hover:text-white" href='/auth' >SignUp</a></li>}
                 </ul>
             </div>

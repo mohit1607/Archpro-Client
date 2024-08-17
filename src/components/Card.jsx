@@ -36,7 +36,7 @@ const Card = ({
       className="card card-compact rounded w-[22rem] mb-8 bg-white transition-transform ease-in-out hover:-translate-y-3 cursor-pointer"
     >
       <figure className="w-full h-full">
-        <img
+        <img loading="lazy"
         className="h-full w-full object-scale-down"
           src={
            imageUrls ? imageUrls[0] : "https://st.hzcdn.com/simgs/440190d20454a5eb_4-8523/tropical-hall.jpg"

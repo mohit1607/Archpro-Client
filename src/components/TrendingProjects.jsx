@@ -3,25 +3,39 @@ import Card from './Card'
 import ProfileCard from './ProfileCard'
 import { query, limit, orderBy, collection, getDocs } from 'firebase/firestore'
 import { FirebaseContext } from '../context/firebase/firebaseContext'
+import toast from 'react-hot-toast'
+import { getDownloadURL, ref } from 'firebase/storage'
 
 const TrendingProjects = () => {
 
-  const {store} = useContext(FirebaseContext)
+  const {store, storage} = useContext(FirebaseContext)
   const [posts, setPosts] = useState([])
+  const [topUsers, setTopUsers] = useState([])
 
       const getLatestposts = async () => {
         try {
           const q = query(
             collection(store, "posts"),
             orderBy("title"),
-            limit(5)
+            limit(3)
           );
+          const userQ  = query(
+            collection(store, 'users'),
+            orderBy('Name'),
+            limit(3)
+          )
           const querySnapshot = await getDocs(q);
           let items = [];
           querySnapshot.forEach((doc) => {
             items.unshift({ postId: doc.id, ...doc.data() });
           });
+          const userQuerySnapshot = await getDocs(userQ)
+          let users = []
+          userQuerySnapshot.forEach((doc) => {
+            users.unshift({ postId: doc.id, ...doc.data() });
+          });
           setPosts(items);
+          setTopUsers(users)
           toast.success("Fetched successfully");
         } catch (e) {
           console.log(e);
@@ -31,6 +45,8 @@ const TrendingProjects = () => {
       useEffect(() => {
         getLatestposts()
       }, []);
+
+      useEffect(() => console.log(topUsers),[topUsers])
 
 
   return (
@@ -84,9 +100,16 @@ const TrendingProjects = () => {
         Loved by fellow folks
       </h2>
       <div className="w-full flex justify-center items gap-12 text-start flex-wrap">
-        <ProfileCard />
-        <ProfileCard />
-        <ProfileCard />
+        {/* <ProfileCard />
+        <ProfileCard /> */}
+        {
+          topUsers?.map((curr, index) => {
+            return (
+              <ProfileCard storage={storage} uid={curr.uid} imageUrl={curr.imageUrl ? curr.imageUrl : ''}  Name={curr.Name} userName={curr.userName} email={curr.email}/>
+            )
+            
+          })
+        }
       </div>
       <div className="flex justify-end w-full">
         <p className="text-sm underline">Find out More...</p>

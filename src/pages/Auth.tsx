@@ -4,10 +4,11 @@ import { FirebaseContext } from '../context/firebase/firebaseContext'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import toast, {Toaster} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { doc, setDoc } from 'firebase/firestore'
 
 const Auth = () => {
 
-  const {auth, setUser} = useContext(FirebaseContext)
+  const { auth, setUser, store } = useContext(FirebaseContext)
 
   // false -> Login form, true -> signup form
   const [toggle, setTogggle] = useState(false)
@@ -21,6 +22,8 @@ const Auth = () => {
     email: '',
     confirm_password:'',
     password: '',
+    userName: '',
+    Name: '',
 })
 
 // navigation
@@ -48,10 +51,11 @@ const signInToast = (status = '') => {
 const signUp = (email: string, password: string) => {
     try{
         createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(async(userCredential) => {
                 // Signed up 
                 const user = userCredential.user;
                 console.log("user", user); 
+                await addUser(user.uid)
                 signInToast('success')
                 setTogggle(false)
             })
@@ -60,6 +64,7 @@ const signUp = (email: string, password: string) => {
                 const errorMessage = error.message;
                 console.error("error code " + errorCode, errorMessage);
                 // alert('something went wrong try again with correct credentials')
+                toast.error('Credentials already in use or some error occured')
                 signInToast()
             });
     }catch(e){
@@ -71,6 +76,8 @@ const signUp = (email: string, password: string) => {
         email: '',
         confirm_password: '',
         password: '',
+        userName: '',
+        Name: '',
     })
 }
 
@@ -104,10 +111,27 @@ const logIn = (email: string, password: string) => {
     })
 }
 
+    const addUser = async (userId: string) => {
+            try {
+                await setDoc(doc(store, "users", userId), {
+                    email: signupForm.email,
+                    userName: signupForm.userName,
+                    Name: signupForm.Name,
+                    imageUrl: '',
+                    uid: userId
+                });
+                // console.log("user createed with ID: ", docRef.id);
+                toast.success('user created successfully')
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                toast.error("Can't add this info to database due to some error")
+            }
+    }
+
 const handleSubmit = () => {
     if(toggle){
-        const {email, password, confirm_password} = signupForm
-        if(!(email && password && confirm_password)){
+        const {email, password, confirm_password, userName} = signupForm
+        if(!(email && password && confirm_password && userName)){
             // alert('fill all the required fields')
             toast.error('Fill all the required fields')
             return
@@ -167,7 +191,26 @@ const handleSubmit = () => {
                     }))
                 }} type="text" className="grow" placeholder="Email" />
                 </label>
-                {/* <label className="input input-bordered flex items-center gap-2">
+
+              <label className="input input-bordered flex items-center gap-2">
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      className="h-4 w-4 opacity-70">
+                      <path
+                          d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
+                      <path
+                          d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
+                  </svg>
+                  <input value={signupForm.Name} onChange={(e) => {
+                      setSignupForm(prev => ({
+                          ...prev, Name: e.target.value
+                      }))
+                  }} type="text" className="grow" placeholder="Full Name" />
+              </label>
+
+                <label className="input input-bordered flex items-center gap-2">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -176,12 +219,13 @@ const handleSubmit = () => {
                     <path
                     d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                 </svg>
-                  <input type="text" value={signupForm.username} onChange={(e) => {
+                  <input type="text" value={signupForm.userName} onChange={(e) => {
                       setSignupForm(prev => ({
-                          ...prev, username: e.target.value
+                          ...prev, userName: e.target.value
                       }))
                   }} className="grow" placeholder="Username" />
-                </label> */}
+                </label>
+                
             <label className="input input-bordered flex items-center gap-2">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
