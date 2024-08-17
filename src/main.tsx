@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
-import { FirebaseProvider } from './context/firebase/firebaseContext.tsx'
+import { FirebaseProvider } from './context/firebase/firebaseContext.jsx'
 import ErrorBoundary from './ErrorBoundary.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
