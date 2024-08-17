@@ -48,7 +48,7 @@ const signInToast = (status = '') => {
 
 
 
-const signUp = (email: string, password: string) => {
+const signUp = (email, password) => {
     try{
         createUserWithEmailAndPassword(auth, email, password)
             .then(async(userCredential) => {
@@ -82,7 +82,7 @@ const signUp = (email: string, password: string) => {
 }
 
 
-const logIn = (email: string, password: string) => {
+const logIn = (email, password) => {
     try{
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -111,7 +111,7 @@ const logIn = (email: string, password: string) => {
     })
 }
 
-    const addUser = async (userId: string) => {
+    const addUser = async (userId) => {
             try {
                 await setDoc(doc(store, "users", userId), {
                     email: signupForm.email,
