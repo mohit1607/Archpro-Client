@@ -1,21 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Home from "./Home.js";
-import Portal from "./pages/Portal.jsx";
-import Portfolio from "./pages/Portfolio.jsx";
-import Social from "./pages/Social.jsx";
-import Project from "./pages/Project.jsx";
-import Auth from "./pages/Auth.js";
-import { FirebaseContext } from "./context/firebase/firebaseContext.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import Layout from "./Layout.js";
+import Home from "./Home";
+import Portal from "./pages/Portal";
+import Portfolio from "./pages/Portfolio";
+import Project from "./pages/Project";
+import Auth from "./pages/Auth";
+import Layout from "./Layout";
 import { Toaster } from "react-hot-toast";
-import Modal from "./components/Modal.jsx";
-import Profile from "./pages/Profile.jsx";
-import Post from "./pages/Post.jsx";
-import ProjectPage from "./pages/ProjectPage.jsx";
-import ProfileReadOnly from "./pages/ProfileReadOnly.jsx";
+import Modal from "./components/Modal";
+import Profile from "./pages/Profile";
+import Post from "./pages/Post";
+import ProjectPage from "./pages/ProjectPage";
+import ProfileReadOnly from "./pages/ProfileReadOnly";
 
 function App() {
   const modalText =

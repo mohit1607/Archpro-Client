@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import Hero from './components/Hero.jsx'
-import Layout from './Layout.js'
-import TrendingProjects from './components/TrendingProjects.jsx'
-import About from './components/About.jsx'
-import About2 from './components/About2.jsx'
+import Hero from './components/Hero'
+import Layout from './Layout'
+import TrendingProjects from './components/TrendingProjects'
+import About from './components/About'
+import About2 from './components/About2'
 
 const Home = () => {
 
