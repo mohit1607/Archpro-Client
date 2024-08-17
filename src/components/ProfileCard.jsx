@@ -24,7 +24,7 @@ const ProfileCard = ({
       }})
     }} className='w-72 h-80 card rounded-md bg-transparent flex flex-col justify-between cursor-pointer'>
        <div className='w-full h-[60%] bg-transparent flex justify-center items-center'>
-        <img src={imageUrl} className='rounded-r-full w-[300px] h-[180px] object-cover' alt="avatar" />
+        <img src={imageUrl ? imageUrl : blank} className='rounded-r-full w-[300px] h-[180px] object-cover' alt="avatar" />
         {/* <Image src={archperson} width={'300'} height={'300'} objectFit='cover' className='rounded-r-full' /> */}
        </div>
        <div className='w-full h-[40%] bg-transparent flex flex-col items-start'>
